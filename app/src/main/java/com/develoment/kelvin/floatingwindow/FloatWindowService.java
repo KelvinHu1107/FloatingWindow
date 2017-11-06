@@ -4,8 +4,13 @@ import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -18,6 +23,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * Created by Kelvin on 2017/11/5.
  */
@@ -27,6 +34,7 @@ public class FloatWindowService extends Service {
     WindowManager windowManager;
     LinearLayout currentSpeed, speedLimit;
     Button button;
+    Bitmap resources;
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -55,7 +63,8 @@ public class FloatWindowService extends Service {
         currentSpeed.setBackgroundColor(Color.argb(66, 255, 0, 0));
         currentSpeed.setLayoutParams(layoutParams);
         currentSpeed.setOrientation(LinearLayout.VERTICAL);
-        speedLimit.setBackground(getResources().getDrawable(R.mipmap.ic_launcher));
+        Drawable drawable = new BitmapDrawable(getResources(), resources);
+        speedLimit.setBackground(drawable);
 
         final TextView textView = new TextView(this);
         textView.setText("0.0 Km/h");
@@ -138,6 +147,8 @@ public class FloatWindowService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        byte[] b = intent.getByteArrayExtra("picResource");
+        resources = BitmapFactory.decodeByteArray(b, 0, b.length);
         return null;
     }
 }
