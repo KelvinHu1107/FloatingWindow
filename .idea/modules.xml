@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FloatingWindow.iml" filepath="$PROJECT_DIR$/FloatingWindow.iml" />
+      <module fileurl="file://C:\Users\kelvinhu1107\Desktop\Projects\FloatingWindow\FloatingWindow.iml" filepath="C:\Users\kelvinhu1107\Desktop\Projects\FloatingWindow\FloatingWindow.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\kelvinhu1107\Desktop\Projects\FloatingWindow\app\app.iml" filepath="C:\Users\kelvinhu1107\Desktop\Projects\FloatingWindow\app\app.iml" />
     </modules>
   </component>
 </project>
