@@ -22,9 +22,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import static com.develoment.kelvin.floatingwindow.MainActivity.OVERLAY_PERMISSION_REQ_CODE;
-
 /**
  * Created by kelvinhu1107 on 2017/11/6.
  */
@@ -40,6 +37,12 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
     public abstract int getLayoutResId();
 
     public abstract Drawable getSpeedLimitResId();
+
+    public abstract Drawable getCurrentSpeedResId();
+
+    public abstract Drawable getEventWindowResId();
+
+    public abstract Drawable getCloseFloatingWindowResId();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,7 +165,6 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         windowManager.addView(currentSpeed, params);
 
         setClickListener(params);
-        //task(textView);
     }
 
 }

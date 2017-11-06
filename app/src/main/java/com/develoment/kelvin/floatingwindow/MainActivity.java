@@ -17,6 +17,21 @@ public class MainActivity extends BaseFloatingWindowActivity {
     }
 
     @Override
+    public Drawable getCurrentSpeedResId() {
+        return null;
+    }
+
+    @Override
+    public Drawable getEventWindowResId() {
+        return null;
+    }
+
+    @Override
+    public Drawable getCloseFloatingWindowResId() {
+        return null;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
