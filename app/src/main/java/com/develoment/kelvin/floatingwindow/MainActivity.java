@@ -1,8 +1,10 @@
 package com.develoment.kelvin.floatingwindow;
 
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MainActivity extends BaseFloatingWindowActivity {
 
@@ -34,5 +36,9 @@ public class MainActivity extends BaseFloatingWindowActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.v("kelvinkelvin", "Main activity");
+
+        startActivity(new Intent(MainActivity.this, GpsTestActivity.class));
     }
 }

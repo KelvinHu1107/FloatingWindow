@@ -36,12 +36,10 @@ public class FloatWindowService extends Service {
     Button button;
     Bitmap resources;
 
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate() {
         super.onCreate();
-
         initComponent();
     }
 
