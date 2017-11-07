@@ -1,10 +1,17 @@
 package com.develoment.kelvin.floatingwindow;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +19,9 @@ import android.provider.Settings;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +30,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+
 /**
  * Created by kelvinhu1107 on 2017/11/6.
  */
@@ -28,9 +40,13 @@ import android.widget.Toast;
 public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
 
     final static int OVERLAY_PERMISSION_REQ_CODE = 99;
+    final static int REQUEST_CODE_FINE_GPS = 100;
     WindowManager windowManager;
     LinearLayout currentSpeed, speedLimit;
     Button button, showMenu;
+    LocationManager locationManager;
+    LocationListener locationListener;
+    TextView textView;
 
     @LayoutRes
     public abstract int getLayoutResId();
@@ -106,7 +122,19 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
                 });
             }
         }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.v("kelvinkelvin", "!ACCESS_FINE_LOCATION");
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_CODE_FINE_GPS);
+        } else {
+            initGps();
+        }
+
     }
+
+
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -125,6 +153,48 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
                 });
             }
         }
+        if (requestCode == REQUEST_CODE_FINE_GPS) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Log.v("kelvinkelvin", "REQUEST_CODE_FINE_GPS failed");
+            }
+            else {
+                initGps();
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void initGps() {
+        locationManager = (LocationManager) this
+                .getSystemService(Context.LOCATION_SERVICE);
+
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if(textView != null) {
+                    textView.setText(String.valueOf(updateSpeedByLocation(location)));
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -146,7 +216,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         currentSpeed.setOrientation(LinearLayout.VERTICAL);
         speedLimit.setBackground(getSpeedLimitResId());
 
-        final TextView textView = new TextView(this);
+        textView = new TextView(this);
         textView.setText("0.0 Km/h");
         textView.setTextColor(Color.BLUE);
         textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
@@ -164,6 +234,11 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         windowManager.addView(currentSpeed, params);
 
         setClickListener(params);
+    }
+
+    private int updateSpeedByLocation(Location location) {
+        int tempSpeed = (int) (location.getSpeed() * 3.6); // m/s --> Km/h
+        return tempSpeed;
     }
 
 }

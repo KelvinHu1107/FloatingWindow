@@ -27,7 +27,7 @@ public class GpsTestActivity extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location location) {
 
-            textView.setText(String.valueOf(location.getLatitude()));
+            textView.setText(String.valueOf(updateSpeedByLocation(location)));
             Log.v("kelvinkelvin", "Current speed:" + location.getSpeed());
         }
 
@@ -130,16 +130,9 @@ public class GpsTestActivity extends AppCompatActivity {
         return criteria;
     }
 
-    private void updateSpeedByLocation(Location location) {
+    private int updateSpeedByLocation(Location location) {
         int tempSpeed = (int) (location.getSpeed() * 3.6); // m/s --> Km/h
-        int adasSpeed = tempSpeed;
-        int recordSpeed = tempSpeed;
-
-        double nowLatitude = location.getLatitude();
-        double nowLongitude = location.getLongitude();
-
-        Log.v("kelvinkelvin", "Speed:" + tempSpeed);
-
+        return tempSpeed;
     }
 
     @Override

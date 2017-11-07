@@ -39,6 +39,6 @@ public class MainActivity extends BaseFloatingWindowActivity {
 
         Log.v("kelvinkelvin", "Main activity");
 
-        startActivity(new Intent(MainActivity.this, GpsTestActivity.class));
+        //startActivity(new Intent(MainActivity.this, GpsTestActivity.class));
     }
 }
