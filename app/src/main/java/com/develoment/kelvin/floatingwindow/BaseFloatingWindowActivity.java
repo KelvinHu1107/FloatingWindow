@@ -46,7 +46,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
     Button button, showMenu;
     LocationManager locationManager;
     LocationListener locationListener;
-    TextView textView;
+    TextView textView, lat, lon;
 
     @LayoutRes
     public abstract int getLayoutResId();
@@ -109,8 +109,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
 
     private void checkPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(BaseFloatingWindowActivity.this)) {
-                Toast.makeText(this, "can not DrawOverlays", Toast.LENGTH_SHORT).show();
+            if (!Settings.canDrawOverlays(BaseFloatingWindowActivity.this)) {Toast.makeText(this, "can not DrawOverlays", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + BaseFloatingWindowActivity.this.getPackageName()));
                 startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
             } else {
@@ -173,7 +172,15 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
                 if(textView != null) {
-                    textView.setText(String.valueOf(updateSpeedByLocation(location)));
+                    textView.setText(String.valueOf(updateSpeedByLocation(location))+" Km/h");
+                }
+
+                if(lat != null){
+                    lat.setText("Lat: "+String.valueOf(location.getLatitude()));
+                }
+
+                if(lon != null){
+                    lon.setText("Lon: "+String.valueOf(location.getLongitude()));
                 }
             }
 
@@ -208,7 +215,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         button = new Button(this);
         button.setText("Close");
         button.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        LinearLayout.LayoutParams layoutParamsText = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams layoutParamsText = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         // linearLayout.setBackgroundColor(Color.argb(66, 255, 0, 0));
 
         currentSpeed.setBackgroundColor(Color.argb(66, 255, 0, 0));
@@ -217,14 +224,24 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         speedLimit.setBackground(getSpeedLimitResId());
 
         textView = new TextView(this);
+        lat = new TextView(this);
+        lon = new TextView(this);
         textView.setText("0.0 Km/h");
         textView.setTextColor(Color.BLUE);
+        lat.setTextColor(Color.BLUE);
+        lon.setTextColor(Color.BLUE);
         textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        lat.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        lon.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 
         textView.setLayoutParams(layoutParamsText);
+        lat.setLayoutParams(layoutParamsText);
+        lon.setLayoutParams(layoutParamsText);
 
-        currentSpeed.addView(speedLimit);
+        //currentSpeed.addView(speedLimit);
         currentSpeed.addView(textView);
+        currentSpeed.addView(lat);
+        currentSpeed.addView(lon);
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(400,500,WindowManager.LayoutParams.TYPE_PHONE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         params.x = 0;
         params.y = 0;
