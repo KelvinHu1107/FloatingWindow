@@ -40,11 +40,11 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
     final static String TAG = "BaseFloatingWindow";
     final static int OVERLAY_PERMISSION_REQ_CODE = 99;
     final static int REQUEST_CODE_FINE_GPS = 100;
-    WindowManager windowManager;
+    WindowManager mWindowManager;
     LinearLayout currentSpeedLayout, speedLimitLayout, eventLayout;
     Button closeBtn, activateBtn;
-    LocationManager locationManager;
-    LocationListener locationListener;
+    LocationManager mLocationManager;
+    LocationListener mLocationListener;
     TextView currentSpeedTv, speedLimitTv, latitudeTv, longitudeTv, eventTv;
 
     @LayoutRes
@@ -72,11 +72,11 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                windowManager.removeViewImmediate(currentSpeedLayout);
-                windowManager.removeViewImmediate(speedLimitLayout);
-                windowManager.removeViewImmediate(eventLayout);
-                windowManager.removeViewImmediate(closeBtn);
-                windowManager = null;
+                mWindowManager.removeViewImmediate(currentSpeedLayout);
+                mWindowManager.removeViewImmediate(speedLimitLayout);
+                mWindowManager.removeViewImmediate(eventLayout);
+                mWindowManager.removeViewImmediate(closeBtn);
+                mWindowManager = null;
             }
         });
 
@@ -96,14 +96,12 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_MOVE:
                         updatedParams.x = (int)(x+(motionEvent.getRawX() - touchX));
                         updatedParams.y = (int)(y+(motionEvent.getRawY() - touchY));
-                        windowManager.updateViewLayout(currentSpeedLayout,updatedParams);
+                        mWindowManager.updateViewLayout(currentSpeedLayout,updatedParams);
                         break;
                     default:break;
                 }
-
                 return false;
             }
-
         });
 
         speedLimitLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -122,14 +120,12 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_MOVE:
                         updatedParams.x = (int)(x+(motionEvent.getRawX() - touchX));
                         updatedParams.y = (int)(y+(motionEvent.getRawY() - touchY));
-                        windowManager.updateViewLayout(speedLimitLayout,updatedParams);
+                        mWindowManager.updateViewLayout(speedLimitLayout,updatedParams);
                         break;
                     default:break;
                 }
-
                 return false;
             }
-
         });
 
         eventLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -148,16 +144,13 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_MOVE:
                         updatedParams.x = (int)(x+(motionEvent.getRawX() - touchX));
                         updatedParams.y = (int)(y+(motionEvent.getRawY() - touchY));
-                        windowManager.updateViewLayout(eventLayout,updatedParams);
+                        mWindowManager.updateViewLayout(eventLayout,updatedParams);
                         break;
                     default:break;
                 }
-
                 return false;
             }
-
         });
-
     }
 
     private void findView(){
@@ -173,7 +166,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
                 activateBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(windowManager == null) {
+                        if(mWindowManager == null) {
                             initComponent();
                         }
                     }
@@ -189,8 +182,6 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
             initGps();
         }
     }
-
-
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -221,11 +212,10 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void initGps() {
-        locationManager = (LocationManager) this
+        mLocationManager = (LocationManager) this
                 .getSystemService(Context.LOCATION_SERVICE);
 
-
-        locationListener = new LocationListener() {
+        mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 if(currentSpeedTv != null) {
@@ -247,28 +237,23 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
 
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {
-
             }
 
             @Override
             public void onProviderEnabled(String s) {
-
             }
 
             @Override
             public void onProviderDisabled(String s) {
-
             }
         };
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
-
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void initComponent(){
 
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         currentSpeedLayout = new LinearLayout(this);
         speedLimitLayout = new LinearLayout(this);
         eventLayout = new LinearLayout(this);
@@ -342,23 +327,22 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         final WindowManager.LayoutParams speedLimitParams = new WindowManager.LayoutParams(300,300,WindowManager.LayoutParams.TYPE_PHONE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         final WindowManager.LayoutParams eventParams = new WindowManager.LayoutParams(600,200,WindowManager.LayoutParams.TYPE_PHONE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
 
-
         currentSpeedParams.x = 0;
         currentSpeedParams.y = 0;
         currentSpeedParams.gravity = Gravity.RIGHT;
-        windowManager.addView(closeBtn, currentSpeedParams);
+        mWindowManager.addView(closeBtn, currentSpeedParams);
         currentSpeedParams.gravity = Gravity.CENTER | Gravity.LEFT;
-        windowManager.addView(currentSpeedLayout, currentSpeedParams);
+        mWindowManager.addView(currentSpeedLayout, currentSpeedParams);
 
         speedLimitParams.x = 100;
         speedLimitParams.y = 200;
         speedLimitParams.gravity = Gravity.TOP | Gravity.LEFT;
-        windowManager.addView(speedLimitLayout, speedLimitParams);
+        mWindowManager.addView(speedLimitLayout, speedLimitParams);
 
         eventParams.x = 0;
         eventParams.y = 300;
         eventParams.gravity = Gravity.TOP;
-        windowManager.addView(eventLayout, eventParams);
+        mWindowManager.addView(eventLayout, eventParams);
 
         setClickListener(currentSpeedParams, eventParams, speedLimitParams);
 
