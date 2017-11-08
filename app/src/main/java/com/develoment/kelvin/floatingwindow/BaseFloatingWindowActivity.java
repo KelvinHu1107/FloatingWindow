@@ -56,7 +56,9 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
 
     public abstract Drawable getEventWindowResId();
 
-    public abstract Drawable getCloseFloatingWindowResId();
+    public abstract Drawable getCloseBtnResId();
+
+    public abstract int getActivateBtnId();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,7 +161,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
     }
 
     private void findView(){
-        activateBtn = (Button) findViewById(R.id.showMenu);
+        activateBtn = findViewById(getActivateBtnId());
     }
 
     private void checkPermission(){
@@ -186,7 +188,6 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         } else {
             initGps();
         }
-
     }
 
 
@@ -294,6 +295,10 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
 
         if(getEventWindowResId() != null) {
             eventLayout.setBackground(getEventWindowResId());
+        }
+
+        if(getCloseBtnResId() != null) {
+            closeBtn.setBackground(getCloseBtnResId());
         }
 
         closeBtn = new Button(this);

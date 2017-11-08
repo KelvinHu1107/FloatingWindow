@@ -7,7 +7,7 @@
     tools:context="com.develoment.kelvin.floatingwindow.MainActivity">
 
     <Button
-        android:id="@+id/showMenu"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
