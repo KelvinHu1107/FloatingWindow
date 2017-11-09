@@ -40,12 +40,12 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
     final static String TAG = "BaseFloatingWindow";
     final static int OVERLAY_PERMISSION_REQ_CODE = 99;
     final static int REQUEST_CODE_FINE_GPS = 100;
-    WindowManager mWindowManager;
-    LinearLayout currentSpeedLayout, speedLimitLayout, eventLayout;
-    Button closeBtn, activateBtn;
-    LocationManager mLocationManager;
-    LocationListener mLocationListener;
-    TextView currentSpeedTv, speedLimitTv, latitudeTv, longitudeTv, eventTv;
+    private WindowManager mWindowManager;
+    private LinearLayout currentSpeedLayout, speedLimitLayout, eventLayout;
+    private Button closeBtn, activateBtn;
+    private LocationManager mLocationManager;
+    private LocationListener mLocationListener;
+    private TextView currentSpeedTv, speedLimitTv, latitudeTv, longitudeTv, eventTv;
 
     @LayoutRes
     public abstract int getLayoutResId();
@@ -64,7 +64,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
-        findView();
+        findViews();
         checkPermission();
     }
 
@@ -153,7 +153,7 @@ public abstract class BaseFloatingWindowActivity extends AppCompatActivity {
         });
     }
 
-    private void findView(){
+    private void findViews(){
         activateBtn = findViewById(getActivateBtnId());
     }
 
